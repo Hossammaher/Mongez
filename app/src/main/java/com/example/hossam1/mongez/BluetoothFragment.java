@@ -27,8 +27,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.UUID;
 
 public class BluetoothFragment extends Fragment implements AdapterView.OnItemClickListener{
     Button discover;
@@ -40,6 +42,13 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     ListView listView;
     TextView On_off_text ,before_turnOn_text ,bluetooth_name ;
     LinearLayout after_trunOn_text;
+
+    //bluetooth connection
+    BluetoothConnectionService mBluetoothConnection;
+    private static final UUID MY_UUID_INSECURE =
+            UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -360,4 +369,13 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         }
 
     }
+
+
+    public void connect(String respond){
+        byte[] bytes = respond.getBytes(Charset.defaultCharset());
+        mBluetoothConnection.write(bytes);
+
+    }
+
+
 }
