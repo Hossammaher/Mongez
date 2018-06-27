@@ -29,5 +29,8 @@ dependencies {
     compile 'com.github.lguipeng:BubbleView:1.0.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
+    compile'com.github.jcordeiro:ShakeBack:1.0'
+    compile 'com.github.mreram:ShowCaseView:1.0.5'
+    compile 'com.github.clans:fab:1.6.4'
+    compile 'com.akexorcist:bluetoothspp:1.0.0'
 }

@@ -20,19 +20,19 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Fragment> fragmentsList = new ArrayList<>();      //fragments for each menu headers in second activity
 
         menuList.add("Chat");       //add titles
-        menuList.add("Bluetooth");
-        menuList.add("Profile");
+//        menuList.add("Bluetooth");
+        menuList.add("How To use");
         menuList.add("About");
 
-        imagesList.add(R.drawable.x);        //add background images
-        imagesList.add(R.drawable.xblue);
-        imagesList.add(R.drawable.xprofile);
-        imagesList.add(R.drawable.xabout);
+        imagesList.add(R.drawable.chat_ui);
+//        imagesList.add(R.drawable.bluetooth_ui);
+        imagesList.add(R.drawable.howtouse_ui);
+        imagesList.add(R.drawable.abut_ui);
 
 
         fragmentsList.add(new ChatFragment());      //add fragment instances
-        fragmentsList.add(new BluetoothFragment());
-        fragmentsList.add(new ProfileFragment());
+//        fragmentsList.add(new BluetoothFragment());
+        fragmentsList.add(new howtouse_fragment());
         fragmentsList.add(new AboutFragment());
 
         Allagi allagi = Allagi.initialize(MainActivity.this, menuList, imagesList, fragmentsList);
@@ -40,4 +40,5 @@ public class MainActivity extends AppCompatActivity {
         allagi.start();         //start the menu list activity
 
     }
+
 }

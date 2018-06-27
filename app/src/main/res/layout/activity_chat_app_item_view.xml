@@ -9,11 +9,19 @@
 
     <LinearLayout
         android:id="@+id/chat_left_msg_layout"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         >
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/ic_launcher"
+            android:layout_gravity="center"
+
+            />
+
 
         <com.github.library.bubbleview.BubbleTextView
             android:layout_width="wrap_content"

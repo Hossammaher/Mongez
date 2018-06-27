@@ -1,16 +1,21 @@
 package com.example.hossam1.mongez;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -19,35 +24,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
-public class BluetoothFragment extends Fragment implements AdapterView.OnItemClickListener{
-    Button discover;
+public class BluetoothFragment extends Fragment implements AdapterView.OnItemClickListener {
+    com.github.clans.fab.FloatingActionButton discover;
     Switch on_off;
-    BluetoothAdapter bluetoothAdapter ;
-    private static final String TAG = "MainActivity";
-    ArrayList<BluetoothDevice> mDevice=new ArrayList<>();
-    DeviceListAdapter deviceListAdapter;
-    ListView listView;
-    TextView On_off_text ,before_turnOn_text ,bluetooth_name ;
-    LinearLayout after_trunOn_text;
 
+    private static final String TAG = "MainActivity";
+    ArrayList<BluetoothDevice> mDevice = new ArrayList<>();
+   ArrayList<BluetoothDevice> mPariedDevice=new ArrayList<>();
+    DeviceListAdapter deviceListAdapter;
+    ListView avalible_device_list, paried_device_list;
+    TextView On_off_text, before_turnOn_text, bluetooth_name;
+    LinearLayout after_trunOn_text;
+    static String address = "";
+
+    static String paired_device_address = null;
+    BluetoothAdapter bluetoothAdapter;
     //bluetooth connection
     BluetoothConnectionService mBluetoothConnection;
-    private static final UUID MY_UUID_INSECURE =
+    static final UUID MY_UUID_INSECURE =
             UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
-
+    BluetoothSocket btSocket = null;
+    private boolean isBtConnected = false;
 
 
     @Override
@@ -55,29 +68,29 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         // Defines the xml file for the fragment
         View inflate = inflater.inflate(R.layout.activity_bluetooth, parent, false);
 
-        on_off=inflate.findViewById(R.id.bluetooth);
-        listView=inflate.findViewById(R.id.lvNewDevices);
-        On_off_text=inflate.findViewById(R.id.On_OFF_txt);
-        discover=inflate.findViewById(R.id.bluetooth_discover);
-        before_turnOn_text=inflate.findViewById(R.id.before_turnOn_text);
-        after_trunOn_text=inflate.findViewById(R.id.Turning_on_layout);
-        bluetooth_name=inflate.findViewById(R.id.bluetooth_name);
+        on_off = inflate.findViewById(R.id.bluetooth);
+        avalible_device_list = inflate.findViewById(R.id.lvNewDevices);
+        paried_device_list = inflate.findViewById(R.id.LvPaired);
+        On_off_text = inflate.findViewById(R.id.On_OFF_txt);
+        discover = inflate.findViewById(R.id.bluetooth_discover);
+        before_turnOn_text = inflate.findViewById(R.id.before_turnOn_text);
+        after_trunOn_text = inflate.findViewById(R.id.Turning_on_layout);
+        bluetooth_name = inflate.findViewById(R.id.bluetooth_name);
 
 
-        listView.setOnItemClickListener(this);
-        bluetoothAdapter=BluetoothAdapter.getDefaultAdapter();
-        IntentFilter filter =new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-        getActivity().registerReceiver(mBroadcastReceiver4,filter);
+        avalible_device_list.setOnItemClickListener(this);
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        getActivity().registerReceiver(mBroadcastReceiver4, filter);
 
 
-        if (bluetoothAdapter.isEnabled()){
+        if (bluetoothAdapter.isEnabled()) {
             before_turnOn_text.setVisibility(View.GONE);
             after_trunOn_text.setVisibility(View.VISIBLE);
             bluetooth_name.setText(bluetoothAdapter.getName());
             on_off.setChecked(true);
             On_off_text.setText("On");
-        }
-        else {
+        } else {
             before_turnOn_text.setVisibility(View.VISIBLE);
             after_trunOn_text.setVisibility(View.GONE);
             on_off.setChecked(false);
@@ -89,7 +102,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-             enable_disable();
+                enable_disable();
             }
         });
 
@@ -97,44 +110,38 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         discover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT).show();
                 discover();
+
+//                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
+
+//        discover.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                discover();
+//            }
+//        });
+
 
         return inflate;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-        Set<BluetoothDevice> pairedDevices= bluetoothAdapter.getBondedDevices();
-
-        if(pairedDevices.size()>0){
-
-            for(BluetoothDevice device : pairedDevices){
-
-                String Dname=device.getName();
-                Toast.makeText(getActivity(), Dname, Toast.LENGTH_SHORT).show();
-            }
-
-        }
-
-    }
 
     private void enable_disable() {
 
-        if (bluetoothAdapter==null){
+        if (bluetoothAdapter == null) {
             Log.d(TAG, "enableDisableBT: Does not have BT capabilities.");
 
         }
 
-        if (!bluetoothAdapter.isEnabled()){
+        if (!bluetoothAdapter.isEnabled()) {
 
-            Intent enabled =new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            Intent enabled = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivity(enabled);
-            IntentFilter filter =new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+            IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
             getActivity().registerReceiver(mBroadcastReceiver1, filter);
             checkBTPermissions();
 
@@ -150,9 +157,9 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             discover();
         }
 
-        if (bluetoothAdapter.isEnabled()){
+        if (bluetoothAdapter.isEnabled()) {
 
-            IntentFilter filter =new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+            IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
             getActivity().registerReceiver(mBroadcastReceiver1, filter);
 
             bluetoothAdapter.disable();
@@ -167,27 +174,27 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
 
-//    @Override
-//    public void onDestroy() {
-//        Log.d(TAG, "onDestroy: called.");
-//        super.onDestroy();
-//        getActivity().unregisterReceiver(mBroadcastReceiver1);
-//        getActivity().unregisterReceiver(mBroadcastReceiver2);
-//        getActivity().unregisterReceiver(mBroadcastReceiver3);
-//        getActivity().unregisterReceiver(mBroadcastReceiver4);
-//    }
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy: called.");
+        super.onDestroy();
+        getActivity().unregisterReceiver(mBroadcastReceiver1);
+        getActivity().unregisterReceiver(mBroadcastReceiver2);
+        getActivity().unregisterReceiver(mBroadcastReceiver3);
+        getActivity().unregisterReceiver(mBroadcastReceiver4);
+    }
 
     public void enable_disable_discover() {
 
         Toast.makeText(getActivity(), "enable discover", Toast.LENGTH_SHORT).show();
 
-        Intent intent =new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 
-        intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,300);
+        intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
         startActivity(intent);
 
-        IntentFilter filter= new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
-        getActivity().registerReceiver(mBroadcastReceiver2,filter);
+        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
+        getActivity().registerReceiver(mBroadcastReceiver2, filter);
 
     }
 
@@ -199,7 +206,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
 
-                switch(state){
+                switch (state) {
                     case BluetoothAdapter.STATE_OFF:
                         Log.d(TAG, "onReceive: STATE OFF");
                         break;
@@ -265,12 +272,20 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             final String action = intent.getAction();
             Log.d(TAG, "onReceive: ACTION FOUND.");
 
-            if (action.equals(BluetoothDevice.ACTION_FOUND)){
-                BluetoothDevice device = intent.getParcelableExtra (BluetoothDevice.EXTRA_DEVICE);
-                mDevice.add(device);
-                Log.d(TAG, "onReceive: " + device.getName() + ": " + device.getAddress());
-                deviceListAdapter = new DeviceListAdapter(context, R.layout.device_adapter_view, mDevice);
-                listView.setAdapter(deviceListAdapter);
+            if (action.equals(BluetoothDevice.ACTION_FOUND)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+                if (mDevice.contains(device)) {
+
+                } else {
+                    mDevice.add(device);
+                    Log.d(TAG, "onReceive: " + device.getName() + ": " + device.getAddress());
+                    deviceListAdapter = new DeviceListAdapter(context, R.layout.device_adapter_view, mDevice);
+                    avalible_device_list.setAdapter(deviceListAdapter);
+
+                }
+
+
             }
         }
     };
@@ -279,13 +294,13 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
-            if (action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)){
+            if (action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)) {
 
-                if(action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)){
+                if (action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)) {
                     BluetoothDevice mDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     //3 cases:
                     //case1: bonded already
-                    if (mDevice.getBondState() == BluetoothDevice.BOND_BONDED){
+                    if (mDevice.getBondState() == BluetoothDevice.BOND_BONDED) {
                         Toast.makeText(context, "BOND_BONDED", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "BroadcastReceiver: BOND_BONDED.");
                     }
@@ -307,19 +322,19 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
     public void discover() {
 
-        if (bluetoothAdapter.isDiscovering()){
+        if (bluetoothAdapter.isDiscovering()) {
             bluetoothAdapter.cancelDiscovery();
 
             checkBTPermissions();
             bluetoothAdapter.startDiscovery();
             IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-            getActivity().registerReceiver(mBroadcastReceiver3,filter);
+            getActivity().registerReceiver(mBroadcastReceiver3, filter);
         }
-        if (!bluetoothAdapter.isDiscovering()){
+        if (!bluetoothAdapter.isDiscovering()) {
             checkBTPermissions();
             bluetoothAdapter.startDiscovery();
             IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-            getActivity().registerReceiver(mBroadcastReceiver3,filter);
+            getActivity().registerReceiver(mBroadcastReceiver3, filter);
         }
     }
 
@@ -356,13 +371,16 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         Log.d(TAG, "onItemClick: You Clicked on a device.");
         String deviceName = mDevice.get(i).getName();
         String deviceAddress = mDevice.get(i).getAddress();
+        paired_device_address = deviceAddress;
 
+
+        System.out.println("hhh " + deviceAddress);
         Log.d(TAG, "onItemClick: deviceName = " + deviceName);
         Log.d(TAG, "onItemClick: deviceAddress = " + deviceAddress);
 
         //create the bond.
         //NOTE: Requires API 17+? I think this is JellyBean
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2){
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             Toast.makeText(getActivity(), "Trying to pair with " + deviceName, Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Trying to pair with " + deviceName);
             mDevice.get(i).createBond();
@@ -371,11 +389,94 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
 
-    public void connect(String respond){
-        byte[] bytes = respond.getBytes(Charset.defaultCharset());
-        mBluetoothConnection.write(bytes);
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+
+        if (pairedDevices.size() > 0) {
+
+            for (BluetoothDevice d : pairedDevices) {
+
+                if (mPariedDevice.contains(d)) {
+
+                } else {
+                    mPariedDevice.add(d);
+                   // paired_device_address = d.getAddress();
+                    deviceListAdapter = new DeviceListAdapter(getActivity(),R.layout.device_adapter_view, (ArrayList<BluetoothDevice>) mPariedDevice);
+                    paried_device_list.setAdapter(deviceListAdapter);
+                    paried_device_list.setOnItemClickListener(myListClickListener);
+                }
+
+
+
+            }
+
+        }
+
 
     }
 
+    private void sendSignal(String number) {
+        if (btSocket != null) {
+            try {
+                btSocket.getOutputStream().write(number.toString().getBytes());
+            } catch (IOException e) {
+                msg("Error");
+            }
+        }
+    }
 
+    private void Disconnect() {
+        if (btSocket != null) {
+            try {
+                btSocket.close();
+            } catch (IOException e) {
+                msg("Error");
+            }
+        }
+
+
+    }
+
+    private void msg(String s) {
+        Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
+    }
+
+
+
+//    private void pairedDevicesList() {
+//        mPariedDevice = bluetoothAdapter.getBondedDevices();
+//        ArrayList list = new ArrayList();
+//
+//        if (mPariedDevice.size() > 0) {
+//            for (BluetoothDevice bt : mPariedDevice) {
+//                list.add(bt.getName().toString() + "\n" + bt.getAddress().toString());
+//            }
+//        } else {
+//            Toast.makeText(getActivity(), "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
+//        }
+//
+//        final ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.device_adapter_view, list);
+//        paried_device_list.setAdapter(adapter);
+//        paried_device_list.setOnItemClickListener(myListClickListener);
+//    }
+
+    private AdapterView.OnItemClickListener myListClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+TextView o = view.findViewById(R.id.tvDeviceAddress);
+            String info = o.getText().toString();
+            String address = info.substring(info.length() - 17);
+            paired_device_address =address;
+            System.out.println(" hhh add"+address);
+//            Intent i = new Intent(getActivity(), ledControl.class);
+//            i.putExtra(EXTRA_ADDRESS, address);
+//            startActivity(i);
+
+        }
+    };
 }
+
+
