@@ -23,14 +23,14 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     testImplementation 'junit:junit:4.12'
-    implementation 'hari.allagi:allagi:0.1.0'
-    compile 'com.github.markushi:circlebutton:1.1'
+    implementation 'hari.allagi:allagi:0.1.0' //main design
+    compile 'com.github.markushi:circlebutton:1.1' // circle button like send and mic
     compile 'com.android.support:recyclerview-v7:26.1.0'
-    compile 'com.github.lguipeng:BubbleView:1.0.1'
+    compile 'com.github.lguipeng:BubbleView:1.0.1'  //bubble of chat design
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile 'com.github.jcordeiro:ShakeBack:1.0'
-    compile 'com.github.mreram:ShowCaseView:1.0.5'
-    compile 'com.github.clans:fab:1.6.4'
-    compile 'com.akexorcist:bluetoothspp:1.0.0'
+    compile 'com.github.clans:fab:1.6.4' //floating action button
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+' //gif lib
+    compile 'com.webianks.library:easy-feedback:1.0.2'
+
 }

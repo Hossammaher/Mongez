@@ -7,40 +7,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jcordeiro.library.ShakeBack;
+
+import com.github.clans.fab.FloatingActionButton;
+
+import com.webianks.easy_feedback.EasyFeedback;
 
 
 public class AboutFragment extends Fragment {
-
+    FloatingActionButton feedback ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_about, container, false);
 
-        ShakeBack.initialize(getActivity(), "hossammaher34@gmail.com", "App feedback")
-                .setVibrationEnabled(true);
+        feedback = view.findViewById(R.id.feedback);
+
+        feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new EasyFeedback.Builder(getActivity())
+                        .withEmail("hossammaher34@gmail.com")
+                        .withSystemInfo()
+                        .build()
+                        .start();
+            }
+        });
+
+
         return view;
     }
 
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ShakeBack.activate();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        ShakeBack.deactivate();
-    }
 
 
 }

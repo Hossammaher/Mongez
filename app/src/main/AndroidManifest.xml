@@ -28,7 +28,8 @@
             android:theme="@style/AppTheme.MenuListActivity.NoActionBar" />
         <activity
             android:name="hari.allagi.ScrollableMenuActivity"
-            android:theme="@style/AppTheme.ScrollableMenuActivity.NoActionBar" />
+            android:theme="@style/AppTheme.ScrollableMenuActivity.NoActionBar"
+            />
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -14,7 +14,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    android:background="@drawable/homeback"
+    android:background="#fff"
     >
 
     <android.support.v7.widget.RecyclerView
@@ -28,40 +28,81 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@drawable/edittext_layout_style"
 
 
         >
         <EditText
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp"
+            android:layout_marginLeft="5dp"
             android:id="@+id/editText"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:hint="input show here"
-            android:textStyle="bold"
+            android:textColorHint="#bdbdbd"
+            android:background="@drawable/rec_edit_text"
+            android:textColor="@android:color/black"
+
             />
 
+        <!--<com.cooltechworks.views.WhatsAppEditText-->
+            <!--android:layout_weight="1"-->
+            <!--android:id="@+id/whatsapp_edit_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="Your Message"-->
+            <!--android:minHeight="48dp"-->
+            <!--android:background="#fff"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textSize="16sp" />-->
 
-        <at.markushi.ui.CircleButton
+
+        <!--<at.markushi.ui.CircleButton-->
+            <!--android:id="@+id/mic_icon"-->
+            <!--android:layout_width="64dip"-->
+            <!--android:layout_height="64dip"-->
+            <!--android:src="@drawable/ic_mic"-->
+            <!--app:cb_color="@color/colorTransparent"-->
+            <!--app:cb_pressedRingWidth="0dp"-->
+
+
+            <!--/>-->
+
+
+        <ImageButton
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/ic_mic"
+            android:background="@color/colorTransparent"
             android:id="@+id/mic_icon"
-            android:layout_width="64dip"
-            android:layout_height="64dip"
-            android:src="@drawable/ic_mic_black_24dp"
-            app:cb_color="#99CC00"
-            app:cb_pressedRingWidth="8dp"
-
             />
 
-        <at.markushi.ui.CircleButton
+        <!--<at.markushi.ui.CircleButton-->
 
+            <!--android:id="@+id/save"-->
+            <!--android:layout_width="64dip"-->
+            <!--android:layout_height="64dip"-->
+            <!--android:layout_gravity="center_vertical|end"-->
+            <!--android:src="@drawable/ic_send_black_24dp"-->
+            <!--app:cb_color="#fff"-->
+            <!--android:visibility="gone"-->
+            <!--app:cb_pressedRingWidth="8dip"-->
+
+            <!--/>-->
+
+
+        <ImageButton
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:id="@+id/save"
-            android:layout_width="64dip"
-            android:layout_height="64dip"
-            android:layout_gravity="center_vertical|end"
-            android:src="@drawable/ic_send_black_24dp"
-            app:cb_color="#99CC00"
+            android:src="@drawable/ic_send"
+            android:background="@color/colorTransparent"
             android:visibility="gone"
-            app:cb_pressedRingWidth="8dip" />
+            />
+
 
 
     </LinearLayout>

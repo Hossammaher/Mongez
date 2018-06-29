@@ -15,19 +15,20 @@
         android:layout_gravity="left"
         >
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@mipmap/ic_launcher"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/mongez"
             android:layout_gravity="center"
+           />
 
-            />
 
 
         <com.github.library.bubbleview.BubbleTextView
+            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/chat_left_msg_text_view"
-            android:text=""
+            android:text="hfgkjhfdkjghfdkjghkjfdhgjkfdhgjkhdfjkgh"
             android:padding="10dp"
             android:textColor="@android:color/white"
             android:layout_marginBottom="10dp"
@@ -36,39 +37,52 @@
             app:arrowHeight="10dp"
             app:arrowPosition="14dp"
             app:arrowLocation="left"
-            app:bubbleColor="#ff8717"
             app:arrowCenter="true"
+            app:bubbleColor="@color/colorTransparent"
+            android:background="@drawable/mongez_message_style"
+           android:layout_marginLeft="5dp"
             />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/chat_right_msg_layout"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         >
 
+
+
         <com.github.library.bubbleview.BubbleTextView
+            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/chat_right_msg_text_view"
-            android:text=""
+            android:text="fgjkdhghfdskghfkjhgkhsfhfkgh"
             android:layout_alignParentRight="true"
             android:padding="10dp"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:layout_marginBottom="10dp"
             app:arrowWidth="8dp"
             app:angle="8dp"
             app:arrowHeight="10dp"
             app:arrowPosition="14dp"
             app:arrowLocation="right"
-            app:bubbleColor="#7EC0EE"
             app:arrowCenter="true"
+            android:layout_marginRight="5dp"
+            app:bubbleColor="@color/colorTransparent"
+            android:background="@drawable/user_message_style"
 
             />
 
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/user"
+            android:layout_gravity="center"
+            />
 
     </LinearLayout>
 

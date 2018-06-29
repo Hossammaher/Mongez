@@ -37,6 +37,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -66,8 +67,8 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
-        View inflate = inflater.inflate(R.layout.activity_bluetooth, parent, false);
 
+        View inflate = inflater.inflate(R.layout.activity_bluetooth, parent, false);
         on_off = inflate.findViewById(R.id.bluetooth);
         avalible_device_list = inflate.findViewById(R.id.lvNewDevices);
         paried_device_list = inflate.findViewById(R.id.LvPaired);
@@ -76,7 +77,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         before_turnOn_text = inflate.findViewById(R.id.before_turnOn_text);
         after_trunOn_text = inflate.findViewById(R.id.Turning_on_layout);
         bluetooth_name = inflate.findViewById(R.id.bluetooth_name);
-
 
         avalible_device_list.setOnItemClickListener(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -108,7 +108,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
 
         discover.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
 
                 discover();
@@ -374,7 +374,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         blue_model.add = address;
 
         blue_model.d = 1;
-        System.out.println("hhh " +  deviceAddress);
+        System.out.println("hhh " + deviceAddress);
         Log.d(TAG, "onItemClick: deviceName = " + deviceName);
         Log.d(TAG, "onItemClick: deviceAddress = " + deviceAddress);
 
@@ -389,33 +389,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
 
-        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-
-        if (pairedDevices.size() > 0) {
-
-            for (BluetoothDevice d : pairedDevices) {
-
-                if (mPariedDevice.contains(d)) {
-
-                } else {
-                    mPariedDevice.add(d);
-                    // paired_device_address = d.getAddress();
-                    deviceListAdapter = new DeviceListAdapter(getActivity(), R.layout.device_adapter_view, (ArrayList<BluetoothDevice>) mPariedDevice);
-                    paried_device_list.setAdapter(deviceListAdapter);
-                    paried_device_list.setOnItemClickListener(myListClickListener);
-                }
-
-
-            }
-
-        }
-
-
-    }
 
     private void sendSignal(String number) {
         if (btSocket != null) {
@@ -467,12 +441,60 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             TextView o = view.findViewById(R.id.tvDeviceAddress);
             String info = o.getText().toString();
             String address = info.substring(info.length() - 17);
-            paired_device_address =address;
+            paired_device_address = address;
             System.out.println(" hhh add" + info);
             blue_model.d = 1;
 
         }
     };
+
+
+    private void pair() {
+
+
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+
+        if (pairedDevices.size() > 0) {
+
+            for (BluetoothDevice d : pairedDevices) {
+
+                if (mPariedDevice.contains(d)) {
+
+                } else {
+                    mPariedDevice.add(d);
+                    // paired_device_address = d.getAddress();
+                    deviceListAdapter = new DeviceListAdapter(getActivity(), R.layout.device_adapter_view, (ArrayList<BluetoothDevice>) mPariedDevice);
+                    paried_device_list.setAdapter(deviceListAdapter);
+                    paried_device_list.setOnItemClickListener(myListClickListener);
+                }
+
+
+            }
+
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+       pair();
+
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        deviceListAdapter = new DeviceListAdapter(getActivity(), R.layout.device_adapter_view, (ArrayList<BluetoothDevice>) mPariedDevice);
+        paried_device_list.setAdapter(deviceListAdapter);
+        paried_device_list.setOnItemClickListener(myListClickListener);
+
+
+    }
+
+
+
+
 }
-
-

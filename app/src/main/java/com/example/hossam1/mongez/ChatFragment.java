@@ -32,6 +32,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,13 +44,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import app.akexorcist.bluetotohspp.library.BluetoothSPP;
-import app.akexorcist.bluetotohspp.library.BluetoothState;
-import app.akexorcist.bluetotohspp.library.DeviceList;
-import at.markushi.ui.CircleButton;
 import chat.ChatAppMsgAdapter;
 import chat.ChatAppMsgDTO;
-import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+
 
 public class ChatFragment extends Fragment {
 
@@ -57,13 +54,15 @@ public class ChatFragment extends Fragment {
     SpeechRecognizer mSpeechRecognizer;
     Intent mSpeechRecognizerIntent;
     EditText input;
-    CircleButton click_to_speak;
-    CircleButton save;
+    ImageButton click_to_speak;
+    ImageButton save;
     RecyclerView chatmesg;
     private ProgressDialog progress;
     BluetoothAdapter myBluetooth = null;
     BluetoothSocket btSocket = null;
     private boolean isBtConnected = false;
+    final List<ChatAppMsgDTO> msgDtoList = new ArrayList<ChatAppMsgDTO>();
+    final ChatAppMsgAdapter chatAppMsgAdapter = new ChatAppMsgAdapter(msgDtoList);
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -72,7 +71,7 @@ public class ChatFragment extends Fragment {
 
         input = (EditText) inflate.findViewById(R.id.editText);
         save = inflate.findViewById(R.id.save);
-        click_to_speak = (CircleButton) inflate.findViewById(R.id.mic_icon);
+        click_to_speak =  inflate.findViewById(R.id.mic_icon);
         chatmesg = (RecyclerView) inflate.findViewById(R.id.chat_recycler_view);
         System.out.println("hhh on create view chat ");
 
@@ -109,7 +108,7 @@ public class ChatFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            progress = ProgressDialog.show(getActivity(), "Connecting...", "Please Wait!!!");
+//            progress = ProgressDialog.show(getActivity(), "Connecting...", "Please Wait!!!");
         }
 
         @Override
@@ -136,14 +135,14 @@ public class ChatFragment extends Fragment {
             super.onPostExecute(result);
 
             if (!ConnectSuccess) {
-                msg("Connection Failed.Try again.");
+//                msg("Connection Failed.Try again.");
                 // getActivity().finish();
             } else {
-                msg("Connected");
+//                msg("Connected");
                 isBtConnected = true;
             }
 
-            progress.dismiss();
+//            progress.dismiss();
         }
     }
 
@@ -157,14 +156,15 @@ public class ChatFragment extends Fragment {
         chatmesg.setLayoutManager(linearLayoutManager);
 
         //first message in left side
-        final List<ChatAppMsgDTO> msgDtoList = new ArrayList<ChatAppMsgDTO>();
-        ChatAppMsgDTO msgDto = new ChatAppMsgDTO(ChatAppMsgDTO.MSG_TYPE_RECEIVED, "hello");
-        msgDtoList.add(msgDto);
 
-        final ChatAppMsgAdapter chatAppMsgAdapter = new ChatAppMsgAdapter(msgDtoList);
+        if (chatAppMsgAdapter.getItemCount()==0){
+            ChatAppMsgDTO msgDto = new ChatAppMsgDTO(ChatAppMsgDTO.MSG_TYPE_RECEIVED, "hello");
+            msgDtoList.add(msgDto);
+
+        }
+
         // Set data adapter to RecyclerView.
         chatmesg.setAdapter(chatAppMsgAdapter);
-
 
         mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(getActivity());
 
@@ -342,5 +342,12 @@ public class ChatFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        final ChatAppMsgAdapter chatAppMsgAdapter = new ChatAppMsgAdapter(msgDtoList);
+        // Set data adapter to RecyclerView.
+        chatmesg.setAdapter(chatAppMsgAdapter);
+    }
 
 }

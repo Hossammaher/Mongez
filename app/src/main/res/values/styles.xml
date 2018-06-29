@@ -6,20 +6,28 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
-    <style name="AppTheme.MenuListActivity.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme.MenuListActivity.NoActionBar"
+        parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorTrueBlack</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent" >@color/colorAccent</item>
 
     </style>
 
-    <style name="AppTheme.ScrollableMenuActivity.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme.ScrollableMenuActivity.NoActionBar"
+        parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
     </style>
+
+    <style name="switch_theme" parent="Theme.AppCompat.Light">
+        <item name="android:colorControlActivated">#8b35c2</item>
+    </style>
+
+
 
 </resources>
