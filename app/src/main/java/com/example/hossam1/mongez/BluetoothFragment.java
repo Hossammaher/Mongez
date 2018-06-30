@@ -444,6 +444,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             paired_device_address = address;
             System.out.println(" hhh add" + info);
             blue_model.d = 1;
+            Toast.makeText(getActivity(), "you click on pair device", Toast.LENGTH_SHORT).show();
 
         }
     };
@@ -491,9 +492,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         paried_device_list.setAdapter(deviceListAdapter);
         paried_device_list.setOnItemClickListener(myListClickListener);
 
-
     }
-
 
 
 

@@ -22,6 +22,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.google.firebase:firebase-database:11.0.4'
     testImplementation 'junit:junit:4.12'
     implementation 'hari.allagi:allagi:0.1.0' //main design
     compile 'com.github.markushi:circlebutton:1.1' // circle button like send and mic
@@ -34,3 +35,6 @@ dependencies {
     compile 'com.webianks.library:easy-feedback:1.0.2'
 
 }
+
+
+apply plugin: 'com.google.gms.google-services'
