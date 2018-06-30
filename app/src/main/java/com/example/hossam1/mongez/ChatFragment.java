@@ -76,6 +76,7 @@ public class ChatFragment extends Fragment {
     final List<ChatAppMsgDTO> msgDtoList = new ArrayList<ChatAppMsgDTO>();
     final ChatAppMsgAdapter chatAppMsgAdapter = new ChatAppMsgAdapter(msgDtoList);
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    String newcomn=null;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
@@ -161,10 +162,34 @@ public class ChatFragment extends Fragment {
     }
 
     void chat(String msgContent, String command) {
-        sendSignal(msgContent);
+        sendSignal(command);
         ChatAppMsgDTO msgDto = new ChatAppMsgDTO(ChatAppMsgDTO.MSG_TYPE_SENT, msgContent);
         msgDtoList.add(msgDto);
-        msgserver = command;
+        /**/
+        //System.out.println(" hhh"+command+"ll");
+        if(command.equals("A0")){
+            newcomn="سيتم فتح الباب" ;
+        } if(command.equals("B0")){
+            newcomn="سيتم غلق الباب" ;
+        }if(command.equals("A1")){
+            newcomn="سيتم فتح الشباك" ;
+        } if(command.equals("B1")){
+            newcomn="سيتم غلق الشباك" ;
+        }if(command.equals("A2")){
+            newcomn="سيتم فتح الانوار" ;
+        } if(command.equals("B2")){
+            newcomn="سيتم غلق الانوار" ;
+        }if(command.equals("A3")){
+            newcomn="سيتم فتح التكييف" ;
+        } if(command.equals("B3")){
+            newcomn="سيتم غلق التكييف" ;
+        }if(command.equals("A4")){
+            newcomn="سيتم فتح البتوجاز" ;
+        } if(command.equals("B4")){
+            newcomn="سيتم غلق البوتجاز" ;
+        }
+        /**/
+        msgserver = newcomn;
         int newMsgPosition = msgDtoList.size();
 
         // Notify recycler view insert one new data.
@@ -270,7 +295,7 @@ public class ChatFragment extends Fragment {
                     // Add a new sent message to the list.
                     /**/
                    // String url = "https://g-project-2018.appspot.com";
-                    String url = "http://192.168.1.8:5050/";
+                    String url = "http://192.168.2.116:5050/";
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                             new Response.Listener<String>() {
                                 @Override
