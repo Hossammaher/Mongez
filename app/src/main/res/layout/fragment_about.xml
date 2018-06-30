@@ -23,20 +23,20 @@
         android:textColor="#000"
         />
 
-        <TextView
+        <!--<TextView-->
 
-            android:id="@+id/dev"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/about"
-            android:layout_marginBottom="312dp"
-            android:text="@string/developers"
-            android:textColor="#3b3535"
-            android:textSize="25sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            <!--android:id="@+id/dev"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/about"-->
+            <!--android:layout_marginBottom="312dp"-->
+            <!--android:text="@string/developers"-->
+            <!--android:textColor="#3b3535"-->
+            <!--android:textSize="25sp"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.0"-->
+            <!--app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--app:layout_constraintRight_toRightOf="parent" />-->
 
 
         <com.github.clans.fab.FloatingActionButton
