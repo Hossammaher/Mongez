@@ -27,6 +27,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,11 +37,22 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.github.library.bubbleview.BubbleTextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -71,7 +83,7 @@ public class ChatFragment extends Fragment {
 
         input = (EditText) inflate.findViewById(R.id.editText);
         save = inflate.findViewById(R.id.save);
-        click_to_speak =  inflate.findViewById(R.id.mic_icon);
+        click_to_speak = inflate.findViewById(R.id.mic_icon);
         chatmesg = (RecyclerView) inflate.findViewById(R.id.chat_recycler_view);
         System.out.println("hhh on create view chat ");
 
@@ -99,6 +111,8 @@ public class ChatFragment extends Fragment {
         }
     }
 
+    String msgserver = "how are you ?";
+
     private void msg(String s) {
         Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
     }
@@ -116,14 +130,14 @@ public class ChatFragment extends Fragment {
             try {
                 if (btSocket == null || !isBtConnected) {
                     myBluetooth = BluetoothAdapter.getDefaultAdapter();
-                    System.out.println("hhhhh "+blue_model.add);
+                    System.out.println("hhhhh " + blue_model.add);
                     BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(blue_model.add);
                     btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);
                     myBluetooth.cancelDiscovery();
                     btSocket.connect();
                 }
             } catch (IOException e) {
-                System.out.println("hhh exp"+e.getMessage());
+                System.out.println("hhh exp" + e.getMessage());
                 ConnectSuccess = false;
             }
 
@@ -135,15 +149,37 @@ public class ChatFragment extends Fragment {
             super.onPostExecute(result);
 
             if (!ConnectSuccess) {
-//                msg("Connection Failed.Try again.");
+                msg("Connection Failed.Try again.");
                 // getActivity().finish();
             } else {
-//                msg("Connected");
+                msg("Connected");
                 isBtConnected = true;
             }
 
 //            progress.dismiss();
         }
+    }
+
+    void chat(String msgContent, String command) {
+        sendSignal(msgContent);
+        ChatAppMsgDTO msgDto = new ChatAppMsgDTO(ChatAppMsgDTO.MSG_TYPE_SENT, msgContent);
+        msgDtoList.add(msgDto);
+        msgserver = command;
+        int newMsgPosition = msgDtoList.size();
+
+        // Notify recycler view insert one new data.
+        chatAppMsgAdapter.notifyItemInserted(newMsgPosition);
+
+        // Scroll RecyclerView to the last message.
+        chatmesg.scrollToPosition(newMsgPosition);
+
+        ChatAppMsgDTO xx = new ChatAppMsgDTO(ChatAppMsgDTO.MSG_TYPE_RECEIVED, msgserver);
+        msgDtoList.add(xx);
+
+        // Empty the input edit text box.
+        input.setText("");
+//                    bt.send(msgContent, true);
+        System.out.println("hhh " + msgContent);
     }
 
     @Override
@@ -157,7 +193,7 @@ public class ChatFragment extends Fragment {
 
         //first message in left side
 
-        if (chatAppMsgAdapter.getItemCount()==0){
+        if (chatAppMsgAdapter.getItemCount() == 0) {
             ChatAppMsgDTO msgDto = new ChatAppMsgDTO(ChatAppMsgDTO.MSG_TYPE_RECEIVED, "hello");
             msgDtoList.add(msgDto);
 
@@ -225,34 +261,53 @@ public class ChatFragment extends Fragment {
         });
 
 
-        final String msgserver = "how are you ?";
-
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                String msgContent = input.getText().toString();
+                msg("save ");
+                final String msgContent = input.getText().toString();
                 if (!TextUtils.isEmpty(msgContent)) {
                     // Add a new sent message to the list.
-                    sendSignal(msgContent);
-                    ChatAppMsgDTO msgDto = new ChatAppMsgDTO(ChatAppMsgDTO.MSG_TYPE_SENT, msgContent);
-                    msgDtoList.add(msgDto);
+                    /**/
+                   // String url = "https://g-project-2018.appspot.com";
+                    String url = "http://192.168.1.8:5050/";
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    msg(" re : " + response);
+                                    try {
+                                        JSONObject obj = new JSONObject(response);
+                                        msg(obj.getString("pred"));
+                                        final String msgContent = input.getText().toString();
+                                        chat(msgContent, obj.getString("pred"));
 
-                    int newMsgPosition = msgDtoList.size();
+                                    } catch (JSONException e) {
 
-                    // Notify recycler view insert one new data.
-                    chatAppMsgAdapter.notifyItemInserted(newMsgPosition);
+                                        e.printStackTrace();
+                                    }
 
-                    // Scroll RecyclerView to the last message.
-                    chatmesg.scrollToPosition(newMsgPosition);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    msg("error" + error.getMessage());
+                                }
+                            }) {
+                        @Override
+                        protected Map<String, String> getParams() {
+                            Map<String, String> params = new HashMap<String, String>();
 
-                    ChatAppMsgDTO xx = new ChatAppMsgDTO(ChatAppMsgDTO.MSG_TYPE_RECEIVED, msgserver);
-                    msgDtoList.add(xx);
+                            final String msgContent = input.getText().toString();
+                            params.put("word", msgContent);
 
-                    // Empty the input edit text box.
-                    input.setText("");
-//                    bt.send(msgContent, true);
-                    System.out.println("hhh " + msgContent);
+                            return params;
+                        }
+
+                    };
+                    VolleySingleton.getInstance(getActivity()).addRequestQue(stringRequest);
+                    /**/
 
 
                 }

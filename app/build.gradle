@@ -33,7 +33,7 @@ dependencies {
     compile 'com.github.clans:fab:1.6.4' //floating action button
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+' //gif lib
     compile 'com.webianks.library:easy-feedback:1.0.2'
-
+    compile 'com.android.volley:volley:1.1.0'
 }
 
 
