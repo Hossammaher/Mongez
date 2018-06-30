@@ -395,6 +395,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
         if (btSocket != null) {
             try {
                 btSocket.getOutputStream().write(number.toString().getBytes());
+                msg("connected");
             } catch (IOException e) {
                 msg("Error");
             }
@@ -444,6 +445,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             paired_device_address = address;
             System.out.println(" hhh add" + info);
             blue_model.d = 1;
+            blue_model.add=address;
 
         }
     };

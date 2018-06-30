@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"></activity>
-        <activity android:name="app.akexorcist.bluetotohspp.library.DeviceList" />
+
         <activity
             android:name="hari.allagi.MenuListActivity"
             android:theme="@style/AppTheme.MenuListActivity.NoActionBar" />
