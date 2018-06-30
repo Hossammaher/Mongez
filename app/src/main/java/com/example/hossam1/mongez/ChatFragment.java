@@ -161,7 +161,7 @@ public class ChatFragment extends Fragment {
     }
 
     void chat(String msgContent, String command) {
-        sendSignal(msgContent);
+        sendSignal(command);
         ChatAppMsgDTO msgDto = new ChatAppMsgDTO(ChatAppMsgDTO.MSG_TYPE_SENT, msgContent);
         msgDtoList.add(msgDto);
         msgserver = command;
@@ -270,7 +270,7 @@ public class ChatFragment extends Fragment {
                     // Add a new sent message to the list.
                     /**/
                    // String url = "https://g-project-2018.appspot.com";
-                    String url = "http://192.168.1.8:5050/";
+                    String url = "http://192.168.2.116:5050/";
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                             new Response.Listener<String>() {
                                 @Override

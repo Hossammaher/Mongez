@@ -3,56 +3,53 @@
     android:id="@+id/custom_dialog_layout_design_user_input"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-
-    >
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
     android:background="#fff"
-    >
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@mipmap/ic_launcher"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:src="@drawable/logo_feedback" />
 
 
-        />
-
-
-</LinearLayout>
+    </LinearLayout>
 
 
     <EditText
-        android:layout_marginTop="10dp"
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:hint="Email"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textColor="#000"
+        android:textColorHint="#4e4949" />
 
     <EditText
-        android:layout_marginTop="5dp"
+        android:id="@+id/feedback_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:hint="feedback"
-        android:id="@+id/feedback_text"
-        />
+        android:textColor="#000"
+        android:textColorHint="#4e4949" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        >
+        android:layout_marginTop="15dp">
 
         <Button
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/cancel"
+            android:background="@drawable/button_style"
             android:text="cancel"
 
             />
@@ -61,17 +58,15 @@
             android:id="@+id/send_feed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="send"
             android:layout_alignParentEnd="true"
+            android:layout_gravity="end"
+            android:background="@drawable/button_style"
+            android:text="send"
 
             />
 
 
-
     </RelativeLayout>
-
-
 
 
 </LinearLayout>
