@@ -444,6 +444,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             paired_device_address = address;
             System.out.println(" hhh add" + info);
             blue_model.d = 1;
+            Toast.makeText(getActivity(), "connected", Toast.LENGTH_SHORT).show();
 
         }
     };
@@ -478,7 +479,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onResume() {
         super.onResume();
-       pair();
+        pair();
 
 
     }

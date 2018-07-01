@@ -289,12 +289,12 @@ public class ChatFragment extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                msg("save ");
+//                msg("save ");
                 final String msgContent = input.getText().toString();
                 if (!TextUtils.isEmpty(msgContent)) {
                     // Add a new sent message to the list.
                     /**/
-                   // String url = "https://g-project-2018.appspot.com";
+                    // String url = "https://g-project-2018.appspot.com";
                     String url = "http://192.168.2.116:5050/";
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                             new Response.Listener<String>() {

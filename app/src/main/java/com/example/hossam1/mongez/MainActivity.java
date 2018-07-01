@@ -18,10 +18,13 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Integer> imagesList = new ArrayList<>();      //menu backgrounds
         ArrayList<Fragment> fragmentsList = new ArrayList<>();      //fragments for each menu headers in second activity
 
+
         menuList.add("CHAT");       //add titles
         menuList.add("CONNECTION");
         menuList.add("HOW TO USE");
         menuList.add("ABOUT");
+
+
 
         imagesList.add(R.drawable.chat_ui);
         imagesList.add(R.drawable.bluetooth_ui);
@@ -29,10 +32,13 @@ public class MainActivity extends AppCompatActivity {
         imagesList.add(R.drawable.about_ui);
 
 
+
+
         fragmentsList.add(new ChatFragment());      //add fragment instances
-      fragmentsList.add(new BluetoothFragment());
+        fragmentsList.add(new BluetoothFragment());
         fragmentsList.add(new howtouse_fragment());
         fragmentsList.add(new AboutFragment());
+
 
         Allagi allagi = Allagi.initialize(MainActivity.this, menuList, imagesList, fragmentsList);
 
@@ -48,10 +54,13 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Integer> imagesList = new ArrayList<>();      //menu backgrounds
         ArrayList<Fragment> fragmentsList = new ArrayList<>();      //fragments for each menu headers in second activity
 
-        menuList.add("Chat");       //add titles
-        menuList.add("Bluetooth");
-        menuList.add("How To use");
-        menuList.add("About");
+
+        menuList.add("CHAT");       //add titles
+        menuList.add("CONNECTION");
+        menuList.add("HOW TO USE");
+        menuList.add("ABOUT");
+
+
 
         imagesList.add(R.drawable.chat_ui);
         imagesList.add(R.drawable.bluetooth_ui);
@@ -59,10 +68,13 @@ public class MainActivity extends AppCompatActivity {
         imagesList.add(R.drawable.about_ui);
 
 
+
+
         fragmentsList.add(new ChatFragment());      //add fragment instances
-//        fragmentsList.add(new BluetoothFragment());
+        fragmentsList.add(new BluetoothFragment());
         fragmentsList.add(new howtouse_fragment());
         fragmentsList.add(new AboutFragment());
+
 
         Allagi allagi = Allagi.initialize(MainActivity.this, menuList, imagesList, fragmentsList);
         allagi.setTransitionDuration(500);      //default value is 1000 milliseconds
@@ -79,10 +91,12 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Integer> imagesList = new ArrayList<>();      //menu backgrounds
         ArrayList<Fragment> fragmentsList = new ArrayList<>();      //fragments for each menu headers in second activity
 
-        menuList.add("Chat");       //add titles
-        menuList.add("Bluetooth");
-        menuList.add("How To use");
-        menuList.add("About");
+        menuList.add("CHAT");       //add titles
+        menuList.add("CONNECTION");
+        menuList.add("HOW TO USE");
+        menuList.add("ABOUT");
+
+
 
         imagesList.add(R.drawable.chat_ui);
         imagesList.add(R.drawable.bluetooth_ui);
@@ -90,10 +104,14 @@ public class MainActivity extends AppCompatActivity {
         imagesList.add(R.drawable.about_ui);
 
 
+
+
         fragmentsList.add(new ChatFragment());      //add fragment instances
         fragmentsList.add(new BluetoothFragment());
         fragmentsList.add(new howtouse_fragment());
         fragmentsList.add(new AboutFragment());
+
+
 
         Allagi allagi = Allagi.initialize(MainActivity.this, menuList, imagesList, fragmentsList);
         allagi.setTransitionDuration(500);      //default value is 1000 milliseconds
