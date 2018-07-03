@@ -348,19 +348,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
     }
 
-//
-//    private void checkBTPermissions() {
-//        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
-//            int permissionCheck = this.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
-//            permissionCheck += this.checkSelfPermission("Manifest.permission.ACCESS_COARSE_LOCATION");
-//            if (permissionCheck != 0) {
-//
-//                this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001); //Any number
-//            }
-//        }else{
-//            Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
-//        }
-//    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -389,51 +376,10 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     }
 
 
-
-
-    private void sendSignal(String number) {
-        if (btSocket != null) {
-            try {
-                btSocket.getOutputStream().write(number.toString().getBytes());
-            } catch (IOException e) {
-                msg("Error");
-            }
-        }
-    }
-
-    private void Disconnect() {
-        if (btSocket != null) {
-            try {
-                btSocket.close();
-            } catch (IOException e) {
-                msg("Error");
-            }
-        }
-
-
-    }
-
     private void msg(String s) {
         Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
     }
 
-
-//    private void pairedDevicesList() {
-//        mPariedDevice = bluetoothAdapter.getBondedDevices();
-//        ArrayList list = new ArrayList();
-//
-//        if (mPariedDevice.size() > 0) {
-//            for (BluetoothDevice bt : mPariedDevice) {
-//                list.add(bt.getName().toString() + "\n" + bt.getAddress().toString());
-//            }
-//        } else {
-//            Toast.makeText(getActivity(), "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
-//        }
-//
-//        final ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.device_adapter_view, list);
-//        paried_device_list.setAdapter(adapter);
-//        paried_device_list.setOnItemClickListener(myListClickListener);
-//    }
 
     private AdapterView.OnItemClickListener myListClickListener = new AdapterView.OnItemClickListener() {
         @Override
@@ -441,7 +387,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
             TextView o = view.findViewById(R.id.tvDeviceAddress);
             String info = o.getText().toString();
             String address = info.substring(info.length() - 17);
-            paired_device_address = address;
+            blue_model.add = address;
             System.out.println(" hhh add" + info);
             blue_model.d = 1;
             Toast.makeText(getActivity(), "connected", Toast.LENGTH_SHORT).show();
@@ -463,7 +409,8 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
                 } else {
                     mPariedDevice.add(d);
-                    // paired_device_address = d.getAddress();
+
+
                     deviceListAdapter = new DeviceListAdapter(getActivity(), R.layout.device_adapter_view, (ArrayList<BluetoothDevice>) mPariedDevice);
                     paried_device_list.setAdapter(deviceListAdapter);
                     paried_device_list.setOnItemClickListener(myListClickListener);
@@ -494,8 +441,6 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
 
     }
-
-
 
 
 }

@@ -43,7 +43,7 @@
 
             android:id="@+id/feedback"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height   ="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
